@@ -1,8 +1,9 @@
 import FlightFilter from "../components/FlightFilter";
+import Services from "../components/Services";
 
 const Home = () => {
   return (
-    <div className="flex flex-col md:flex-row h-full mt-6 max-w-7xl mx-auto">
+    <div className="flex flex-col h-full mx-auto mt-6 md:flex-row max-w-7xl">
       <div className="w-full md:w-3/4">
         <FlightFilter />
 
@@ -11,7 +12,9 @@ const Home = () => {
           <div className="w-full md:w-1/4">Flight sorter</div>
         </div>
       </div>
-      <div className="w-full md:w-1/4">services</div>
+      <div className="w-full md:w-1/4">
+        <Services />
+      </div>
     </div>
   );
 };
