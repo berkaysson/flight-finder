@@ -1,22 +1,19 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import MyFlights from "./pages/MyFlights";
+import Navigation from "./components/Navigation";
 
 const Layout: React.FC = () => {
   return (
-    <div>
+    <div className="text-textBlack">
       <Router>
-        <div>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/my-flights" element={<MyFlights />} />
-            {/* <Route path="*" element={<NotFound />} /> */}
-          </Routes>
-        </div>
+        <Navigation />
+
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/my-flights" element={<MyFlights />} />
+          {/* <Route path="*" element={<NotFound />} /> */}
+        </Routes>
       </Router>
     </div>
   );
