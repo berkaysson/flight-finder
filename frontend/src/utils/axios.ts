@@ -1,4 +1,5 @@
 import axios from "axios";
+import axiosRetry from "axios-retry";
 
 export const schipholAxiosInstance = axios.create({
   baseURL: "https://api.schiphol.nl/public-flights",
@@ -14,5 +15,15 @@ export const backendAxiosInstance = axios.create({
   baseURL: "http://localhost:8080/api",
   headers: {
     Accept: "application/json",
+  },
+});
+
+axiosRetry(schipholAxiosInstance, {
+  retries: 3,
+  retryDelay: (retryCount) => {
+    return axiosRetry.exponentialDelay(retryCount);
+  },
+  retryCondition: (error) => {
+    return error.response?.status === 429;
   },
 });
