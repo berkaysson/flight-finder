@@ -6,14 +6,11 @@ import { ThemeContext } from "../context/ThemeContext";
 import { FlightContext } from "../context/FlightsContext";
 
 const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
-  const _destination =
-    flight.route.destinations[flight.route.destinations.length - 1];
-
   const { theme } = useContext(ThemeContext);
   const { getDestination, getAirline, getAircraft } = useContext(FlightContext);
-  const [airline, setAirline] = useState(flight.prefixIATA);
-  const [destination, setDestination] = useState(_destination);
-  const [aircraft, setAircraft] = useState(flight.aircraftType.iataMain);
+  const [airline, setAirline] = useState("...");
+  const [destinations, setDestinations] = useState<string[]>(["..."]);
+  const [aircraft, setAircraft] = useState("...");
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
   const departureTime = new Date(flight.scheduleDateTime).toLocaleTimeString(
@@ -51,9 +48,15 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
   }
 
   useEffect(() => {
-    getDestination(_destination).then((data) => {
-      setDestination(data.city);
-    });
+    const fetchDestinations = async () => {
+      const destinationPromises = flight.route.destinations.map((destination) =>
+        getDestination(destination)
+      );
+      const destinationData = await Promise.all(destinationPromises);
+      setDestinations(destinationData.map((data) => data.city));
+    };
+
+    fetchDestinations();
     getAirline(flight.prefixIATA).then((data) => {
       setAirline(data.publicName);
     });
@@ -77,7 +80,9 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
         <div className="flex flex-row gap-2 text-lg font-bold">
           {flightDirection === "A" ? (
             <>
-              <span>{destination}</span>
+              {destinations.map((destination, index) => (
+                <span key={index}>{destination}</span>
+              ))}
               <span>-</span>
               <span>Amsterdam (AAS)</span>
             </>
@@ -85,7 +90,9 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
             <>
               <span>Amsterdam (AAS)</span>
               <span>-</span>
-              <span>{destination}</span>
+              {destinations.map((destination, index) => (
+                <span key={index}>{destination}</span>
+              ))}
             </>
           )}
         </div>
@@ -100,7 +107,7 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
               Departure
             </div>
             <div className="font-bold">{departureTime}</div> Airport:
-            {flightDirection === "A" ? _destination : "Amsterdam (AAS)"}
+            {flightDirection === "A" ? destinations[0] : "Amsterdam (AAS)"}
           </div>
 
           <div className="flex items-center justify-between w-full gap-10 sm:mx-10">
@@ -120,7 +127,7 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
               Arrival
             </div>
             <div className="font-bold">{landingTime}</div>
-            Airport: {flightDirection === "A" ? "AAS" : _destination}
+            Airport: {flightDirection === "A" ? "AAS" : destinations[0]}
           </div>
         </div>
 
@@ -131,15 +138,15 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
           <p className="text-sm">Round Trip</p>
           {isDetailsOpen && (
             <>
-              <p>Flight code: {flight.mainFlight}</p>
-              <p>Aircraft: {aircraft}</p>
+              <p className="text-sm">Flight code: {flight.mainFlight}</p>
+              <p className="text-sm">Aircraft: {aircraft}</p>
             </>
           )}
         </div>
 
         {/* Third Row: Book Flight Button */}
         <div className="absolute bottom-0 right-0">
-          <button className="px-6 py-4 text-white sm:px-8 rounded-br-md rounded-tl-md bg-theme hover:opacity-80">
+          <button className="px-4 py-2 text-white sm:px-8 rounded-br-md rounded-tl-md bg-theme hover:opacity-80">
             Book Flight
           </button>
         </div>

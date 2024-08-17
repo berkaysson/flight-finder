@@ -4,7 +4,7 @@ export const lightTheme = {
     textWhite: "#ffffff",
     theme: "#4b0097",
     textBlack: "#081e44",
-    textAlt: "#97c4fc",
+    textAlt: "#3189fb",
     hover: "#e6e0eb",
   },
 
