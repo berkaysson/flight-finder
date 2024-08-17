@@ -1,4 +1,3 @@
-// src/context/ThemeContext.tsx
 import React, { createContext } from "react";
 import { ThemeProvider as StyledThemeProvider } from "styled-components";
 import { lightTheme } from "../utils/theme";

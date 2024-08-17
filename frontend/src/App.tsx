@@ -1,12 +1,15 @@
 import styled from "styled-components";
 import { ThemeProvider } from "./context/ThemeContext";
 import Layout from "./Layout";
+import { FlightProvider } from "./context/FlightsContext";
 
 function App() {
   return (
     <AppWrapper>
       <ThemeProvider>
-        <Layout />
+        <FlightProvider>
+          <Layout />
+        </FlightProvider>
       </ThemeProvider>
     </AppWrapper>
   );
