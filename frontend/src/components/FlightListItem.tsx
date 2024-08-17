@@ -107,7 +107,7 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
               Departure
             </div>
             <div className="font-bold">{departureTime}</div> Airport:
-            {flightDirection === "A" ? destinations[0] : "Amsterdam (AAS)"}
+            {flightDirection === "A" ? flight.route.destinations[0] : "Amsterdam (AAS)"}
           </div>
 
           <div className="flex items-center justify-between w-full gap-10 sm:mx-10">
@@ -127,7 +127,7 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
               Arrival
             </div>
             <div className="font-bold">{landingTime}</div>
-            Airport: {flightDirection === "A" ? "AAS" : destinations[0]}
+            Airport: {flightDirection === "A" ? "AAS" : flight.route.destinations[0]}
           </div>
         </div>
 
