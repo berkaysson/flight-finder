@@ -6,7 +6,7 @@ import { CarFront, HotelIcon, TentTree } from "lucide-react";
 
 const Services = () => {
   return (
-    <div className="flex flex-col items-center justify-center gap-6 m-4 mt-0">
+    <div className="flex flex-row flex-wrap items-center justify-center gap-6 m-4 mt-0 lg:flex-col">
       <ServiceItem className="relative rounded-lg shadow-md">
         <img src={CarRental} alt="car-rental" />
         <span className="absolute flex flex-col gap-1 text-xl text-textWhite service-name bottom-5 left-5">
@@ -32,7 +32,7 @@ const Services = () => {
 export default Services;
 
 const ServiceItem = styled.div`
-  max-width: 425px;
+  max-width: 300px;
 
   .service-name {
     font-weight: 600;
