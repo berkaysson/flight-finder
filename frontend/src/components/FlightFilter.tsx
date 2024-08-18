@@ -55,7 +55,7 @@ const FlightFilter = () => {
         </h2>
         <div className="inline-flex font-bold">
           <TripTypeButton
-            className="border-r-0 rounded-l-full"
+            className="border-r-0 rounded-l-full translate-ease"
             onClick={() => setTripType("Round Trip")}
             active={tripType === "Round Trip"}
           >
@@ -64,7 +64,7 @@ const FlightFilter = () => {
           <TripTypeButton
             onClick={() => setTripType("One Way")}
             active={tripType === "One Way"}
-            className="border-l-0 rounded-r-full"
+            className="border-l-0 rounded-r-full translate-ease"
           >
             One Way
           </TripTypeButton>
@@ -121,7 +121,7 @@ const FlightFilter = () => {
 
       <div className="flex m-2 mt-4">
         <button
-          className="px-4 py-2 text-white rounded-lg bg-theme hover:opacity-80"
+          className="px-4 py-2 text-white rounded-lg translate-ease bg-theme hover:opacity-80"
           onClick={handleSubmit}
         >
           Show Flights

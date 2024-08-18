@@ -98,7 +98,7 @@ const MyFlightListItem = ({ flight }: { flight: FlightServiceData }) => {
           <div className="flex justify-end mt-2 sm:hidden">
             <button
               onClick={toggleExpand}
-              className="px-2 py-2 text-sm rounded-md text-theme bg-hover hover:opacity-80"
+              className="px-2 py-2 text-sm rounded-md text-theme bg-hover translate-ease hover:opacity-80"
             >
               {isExpanded ? "Less" : "More"}
             </button>

@@ -188,7 +188,7 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
               Booked!
             </div>
           ) : (
-            <button className="px-4 py-2 text-white sm:py-4 sm:px-8 rounded-br-md rounded-tl-md bg-theme hover:opacity-80">
+            <button className="px-4 py-2 text-white translate-ease sm:py-4 sm:px-8 rounded-br-md rounded-tl-md bg-theme hover:opacity-80">
               Book Flight
             </button>
           )}
@@ -197,7 +197,7 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
         <div className="absolute left-0 -bottom-10">
           <button
             onClick={() => setIsDetailsOpen(!isDetailsOpen)}
-            className="px-4 py-2 underline height-8 rounded-b-md hover:no-underline hover:opacity-80 text-theme bg-hover"
+            className="px-4 py-2 underline height-8 translate-ease rounded-b-md hover:no-underline hover:opacity-80 text-theme bg-hover"
           >
             {isDetailsOpen ? "Hide Details" : "Check the Details"}
           </button>

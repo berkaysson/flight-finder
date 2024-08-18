@@ -7,7 +7,7 @@ import { CarFront, HotelIcon, TentTree } from "lucide-react";
 const Services = () => {
   return (
     <div className="flex flex-row flex-wrap items-center justify-center gap-6 m-4 mt-0 lg:flex-col">
-      <ServiceItem className="relative rounded-lg shadow-md">
+      <ServiceItem className="relative rounded-lg shadow-md translate-ease">
         <img src={CarRental} alt="car-rental" />
         <span className="absolute flex flex-col gap-1 text-xl text-textWhite service-name bottom-5 left-5">
           <CarFront /> CAR RENTALS
@@ -33,6 +33,8 @@ export default Services;
 
 const ServiceItem = styled.div`
   max-width: 300px;
+  position: relative;
+  overflow: hidden;
 
   .service-name {
     font-weight: 600;
@@ -45,13 +47,15 @@ const ServiceItem = styled.div`
     height: 100%;
     border-radius: 0.5rem;
     filter: brightness(0.7);
+    transition: transform 0.3s ease, filter 0.3s ease;
   }
 
   &:hover {
     cursor: pointer;
 
     img {
-      filter: brightness(0.8);
+      filter: brightness(0.9);
+      transform: scale(1.2);
     }
   }
 `;
