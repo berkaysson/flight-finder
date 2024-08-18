@@ -1,4 +1,4 @@
-import { schipholAxiosInstance } from "../utils/axios";
+import { backendAxiosInstance } from "../utils/axios";
 
 export const getAllFlights = async (
   flightDirection: string,
@@ -18,41 +18,43 @@ export const getAllFlights = async (
       params.toDateTime = toDateTime;
     }
 
-    const response = await schipholAxiosInstance.get("/flights", {
+    const response = await backendAxiosInstance.get("/schiphol/flights", {
       params: params,
     });
-
     return response.data;
   } catch (error) {
     console.error("Error fetching flights:", error);
+    throw error;
   }
 };
 
 export const getDestinationByIata = async (destination: string) => {
   try {
-    const response = await schipholAxiosInstance.get(
-      `/destinations/${destination}`
+    const response = await backendAxiosInstance.get(
+      `/schiphol/destinations/${destination}`
     );
     return response.data;
   } catch (error) {
-    console.error("Error fetching flights:", error);
+    console.error("Error fetching destination:", error);
     throw error;
   }
 };
 
 export const getAirlineByIata = async (prefixIata: string) => {
   try {
-    const response = await schipholAxiosInstance.get(`/airlines/${prefixIata}`);
+    const response = await backendAxiosInstance.get(
+      `/schiphol/airlines/${prefixIata}`
+    );
     return response.data;
   } catch (error) {
-    console.error("Error fetching flights:", error);
+    console.error("Error fetching airline:", error);
     throw error;
   }
 };
 
 export const getAircraftTypes = async (iataMain: string, iataSub: string) => {
   try {
-    const response = await schipholAxiosInstance.get(`/aircrafttypes`, {
+    const response = await backendAxiosInstance.get(`/schiphol/aircrafttypes`, {
       params: {
         iataMain: iataMain,
         iataSub: iataSub,
@@ -60,7 +62,7 @@ export const getAircraftTypes = async (iataMain: string, iataSub: string) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Error fetching flights:", error);
+    console.error("Error fetching aircraft types:", error);
     throw error;
   }
 };
