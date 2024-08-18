@@ -7,12 +7,14 @@ import { FlightContext } from "../context/FlightsContext";
 
 const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
   const { theme } = useContext(ThemeContext);
-  const { getDestination, getAirline, getAircraft, createMyFlight } =
+  const { getDestination, getAirline, getAircraft, createMyFlight, myFlights } =
     useContext(FlightContext);
   const [airline, setAirline] = useState("...");
   const [destinations, setDestinations] = useState<string[]>(["..."]);
   const [aircraft, setAircraft] = useState("...");
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+
+  const isBooked = myFlights.find((myFlight) => myFlight.id === flight.id);
 
   const departureTime = new Date(flight.scheduleDateTime).toLocaleTimeString(
     [],
@@ -181,9 +183,15 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
 
         {/* Third Row: Book Flight Button */}
         <div className="absolute bottom-0 right-0" onClick={handleBookFlight}>
-          <button className="px-4 py-2 text-white sm:py-4 sm:px-8 rounded-br-md rounded-tl-md bg-theme hover:opacity-80">
-            Book Flight
-          </button>
+          {isBooked ? (
+            <div className="px-4 py-2 font-bold text-textAlt sm:py-4 sm:px-8 rounded-br-md rounded-tl-md bg-hover">
+              Booked!
+            </div>
+          ) : (
+            <button className="px-4 py-2 text-white sm:py-4 sm:px-8 rounded-br-md rounded-tl-md bg-theme hover:opacity-80">
+              Book Flight
+            </button>
+          )}
         </div>
 
         <div className="absolute left-0 -bottom-10">
