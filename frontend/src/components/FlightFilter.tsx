@@ -3,12 +3,7 @@ import Card from "./ui/Card";
 import { useContext, useState } from "react";
 import { Plane, PlaneLanding, PlaneTakeoff, CalendarFold } from "lucide-react";
 import { FlightContext } from "../context/FlightsContext";
-import { format } from "date-fns";
-
-const formatDateTime = (date: string) => {
-  if (!date) return "";
-  return format(new Date(date), "yyyy-MM-dd'T'HH:mm:ss");
-};
+import { formatDateTime } from "../utils/date";
 
 const FlightFilter = () => {
   const { getFlights } = useContext(FlightContext);
@@ -106,7 +101,7 @@ const FlightFilter = () => {
           <InputWrapper>
             <CalendarFold size={20} className="input-icon" />
             <StyledInput
-              type="date"
+              type="datetime-local"
               value={fromDate}
               onChange={handleFromDateChange}
               className="sm:rounded-l-full sm:border-r-0 rounded-t-xl"
@@ -115,7 +110,7 @@ const FlightFilter = () => {
           <InputWrapper>
             <CalendarFold size={20} className="input-icon" />
             <StyledInput
-              type="date"
+              type="datetime-local"
               value={toDate}
               onChange={handleToDateChange}
               className="sm:rounded-r-full sm:border-l-0 rounded-b-xl"

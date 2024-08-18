@@ -8,6 +8,8 @@ import {
   getDestinationByIata,
 } from "../services/flightService";
 import { createFlight, getAllMyFlights } from "../services/backendService";
+import { formatDateTime } from "../utils/date";
+import { addHours } from "date-fns";
 
 interface FlightContextType {
   flights: FlightInfo[];
@@ -50,35 +52,56 @@ export const FlightProvider: React.FC<React.PropsWithChildren> = ({
   const [myFlights, setMyFlights] = useState<FlightServiceData[]>([]);
 
   useEffect(() => {
-    getAllFlights("A").then((response) => {
-      if (response) {
-        if (response.flights.length > 0 && Array.isArray(response.flights)) {
-          setFlights(response.flights.slice(0, 4));
-        }
-      } else setFlights([]);
-    });
-
-    getAllMyFlights().then((response) => {
-      if (response) {
-        if (response.length > 0 && Array.isArray(response)) {
-          setMyFlights(response);
-        }
-      } else setMyFlights([]);
-    });
+    const localOffsetHour = new Date().getTimezoneOffset() / 60;
+    const now = formatDateTime(
+      addHours(new Date(), -localOffsetHour).toISOString().slice(0, 16)
+    );
+    getFlights("A", now);
+    getMyFlights();
   }, []);
 
   const getFlights = useMemo(
-    () => async (flightDirection: string, fromDate: string, toDate: string) => {
+    () =>
+      async (
+        flightDirection: string = "A",
+        fromDate: string = "",
+        toDate: string = ""
+      ) => {
+        try {
+          const response = await getAllFlights(
+            flightDirection,
+            fromDate,
+            toDate
+          );
+          if (response) {
+            if (
+              response.flights.length > 0 &&
+              Array.isArray(response.flights)
+            ) {
+              setFlights(response.flights.slice(0, 4));
+            }
+          } else setFlights([]);
+          return response;
+        } catch (error) {
+          console.error("Failed to fetch flights", error);
+          return {};
+        }
+      },
+    []
+  );
+
+  const getMyFlights = useMemo(
+    () => async () => {
       try {
-        const response = await getAllFlights(flightDirection, fromDate, toDate);
+        const response = await getAllMyFlights();
         if (response) {
-          if (response.flights.length > 0 && Array.isArray(response.flights)) {
-            setFlights(response.flights.slice(0, 4));
+          if (response.length > 0 && Array.isArray(response)) {
+            setMyFlights(response);
           }
         } else setFlights([]);
         return response;
       } catch (error) {
-        console.error("Failed to fetch destination", error);
+        console.error("Failed to fetch your flights", error);
         return {};
       }
     },
@@ -137,7 +160,7 @@ export const FlightProvider: React.FC<React.PropsWithChildren> = ({
         });
         return response;
       } catch (error) {
-        console.error("Failed to fetch aircraft types", error);
+        console.error("Failed to create your flight", error);
         return {};
       }
     },
