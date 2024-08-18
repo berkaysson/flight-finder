@@ -34,3 +34,14 @@ export type FlightInfo = {
   terminal: number;
   schemaVersion: string;
 };
+
+export interface FlightServiceData {
+  id: string;
+  mainFlight: string;
+  scheduleDateTime: string; // Use ISO string format for dates
+  departure: string;
+  arrival: string;
+  userId: string;
+  airlineCode: string;
+  price: number;
+}

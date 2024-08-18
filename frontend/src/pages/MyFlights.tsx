@@ -1,5 +1,6 @@
 import { Info } from "lucide-react";
 import MyFlightsFilter from "../components/MyFlightsFilter";
+import MyFlightsList from "../components/MyFlightsList";
 
 const MyFlights = () => {
   return (
@@ -26,7 +27,9 @@ const MyFlights = () => {
         </div>
       </div>
 
-      <div>myflights list</div>
+      <div>
+        <MyFlightsList />
+      </div>
     </div>
   );
 };

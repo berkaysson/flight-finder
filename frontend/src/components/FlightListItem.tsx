@@ -7,7 +7,8 @@ import { FlightContext } from "../context/FlightsContext";
 
 const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
   const { theme } = useContext(ThemeContext);
-  const { getDestination, getAirline, getAircraft } = useContext(FlightContext);
+  const { getDestination, getAirline, getAircraft, createMyFlight } =
+    useContext(FlightContext);
   const [airline, setAirline] = useState("...");
   const [destinations, setDestinations] = useState<string[]>(["..."]);
   const [aircraft, setAircraft] = useState("...");
@@ -46,6 +47,34 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
     }
     return `${hours}h ${minutes}m`;
   }
+
+  const handleBookFlight = () => {
+    const departure = flightDirection === "D" ? "Amsterdam" : destinations[0];
+    const arrival =
+      flightDirection === "A"
+        ? "Amsterdam"
+        : destinations[destinations.length - 1];
+
+    if (new Date(flight.scheduleDateTime) < new Date()) {
+      console.log("expired");
+      // add toaster
+      return;
+    }
+
+    createMyFlight({
+      id: flight.id,
+      mainFlight: flight.mainFlight,
+      scheduleDateTime: flight.scheduleDateTime,
+      departure,
+      arrival,
+      userId: "1",
+      airlineCode: airline,
+      price: 200,
+    }).then((data) => {
+      console.log(data);
+      // add toaster
+    });
+  };
 
   useEffect(() => {
     const fetchDestinations = async () => {
@@ -151,7 +180,7 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
         </div>
 
         {/* Third Row: Book Flight Button */}
-        <div className="absolute bottom-0 right-0">
+        <div className="absolute bottom-0 right-0" onClick={handleBookFlight}>
           <button className="px-4 py-2 text-white sm:py-4 sm:px-8 rounded-br-md rounded-tl-md bg-theme hover:opacity-80">
             Book Flight
           </button>

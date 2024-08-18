@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { createContext, useEffect, useState, useMemo } from "react";
-import { FlightInfo } from "../types/flight";
+import { FlightInfo, FlightServiceData } from "../types/flight";
 import {
   getAircraftTypes,
   getAirlineByIata,
   getAllFlights,
   getDestinationByIata,
 } from "../services/flightService";
+import { createFlight, getAllMyFlights } from "../services/backendService";
 
 interface FlightContextType {
   flights: FlightInfo[];
@@ -18,6 +19,8 @@ interface FlightContextType {
     fromDate: string,
     toDate: string
   ) => Promise<any>;
+  createMyFlight: (data: FlightServiceData) => Promise<any>;
+  myFlights: FlightServiceData[];
 }
 
 export const FlightContext = createContext<FlightContextType>({
@@ -34,12 +37,17 @@ export const FlightContext = createContext<FlightContextType>({
   getFlights: async () => {
     return {};
   },
+  createMyFlight: async () => {
+    return {};
+  },
+  myFlights: [],
 });
 
 export const FlightProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
   const [flights, setFlights] = useState<FlightInfo[]>([]);
+  const [myFlights, setMyFlights] = useState<FlightServiceData[]>([]);
 
   useEffect(() => {
     getAllFlights("A").then((response) => {
@@ -48,6 +56,14 @@ export const FlightProvider: React.FC<React.PropsWithChildren> = ({
           setFlights(response.flights.slice(0, 4));
         }
       } else setFlights([]);
+    });
+
+    getAllMyFlights().then((response) => {
+      if (response) {
+        if (response.length > 0 && Array.isArray(response)) {
+          setMyFlights(response);
+        }
+      } else setMyFlights([]);
     });
   }, []);
 
@@ -108,14 +124,36 @@ export const FlightProvider: React.FC<React.PropsWithChildren> = ({
     []
   );
 
+  const createMyFlight = useMemo(
+    () => async (flightData: FlightServiceData) => {
+      try {
+        const response = await createFlight(flightData);
+        getAllMyFlights().then((response) => {
+          if (response) {
+            if (response.length > 0 && Array.isArray(response)) {
+              setMyFlights(response);
+            }
+          } else setMyFlights([]);
+        });
+        return response;
+      } catch (error) {
+        console.error("Failed to fetch aircraft types", error);
+        return {};
+      }
+    },
+    []
+  );
+
   return (
     <FlightContext.Provider
       value={{
         flights,
+        myFlights,
         getDestination,
         getAirline,
         getAircraft,
         getFlights,
+        createMyFlight,
       }}
     >
       {children}
