@@ -1,11 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, {
-  createContext,
-  useEffect,
-  useState,
-  useCallback,
-  useMemo,
-} from "react";
+import React, { createContext, useEffect, useState, useMemo } from "react";
 import { FlightInfo } from "../types/flight";
 import {
   getAircraftTypes,
@@ -19,7 +13,11 @@ interface FlightContextType {
   getDestination: (destination: string) => Promise<any>;
   getAirline: (prefixIata: string) => Promise<any>;
   getAircraft: (iataMain: string, iataSub: string) => Promise<any>;
-  changeFlightDirection: (direction: "A" | "D" | "") => void;
+  getFlights: (
+    flightDirection: string,
+    fromDate: string,
+    toDate: string
+  ) => Promise<any>;
 }
 
 export const FlightContext = createContext<FlightContextType>({
@@ -33,17 +31,18 @@ export const FlightContext = createContext<FlightContextType>({
   getAircraft: async () => {
     return {};
   },
-  changeFlightDirection: () => {},
+  getFlights: async () => {
+    return {};
+  },
 });
 
 export const FlightProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
   const [flights, setFlights] = useState<FlightInfo[]>([]);
-  const [flightDirection, setFlightDirection] = useState<"A" | "D" | "">("A");
 
   useEffect(() => {
-    getAllFlights(flightDirection).then((response) => {
+    getAllFlights("A").then((response) => {
       if (response) {
         if (response.flights.length > 0 && Array.isArray(response.flights)) {
           setFlights(response.flights.slice(0, 4));
@@ -52,17 +51,23 @@ export const FlightProvider: React.FC<React.PropsWithChildren> = ({
     });
   }, []);
 
-  useEffect(() => {
-    getAllFlights(flightDirection).then((response) => {
-      if (response.flights.length > 0 && Array.isArray(response.flights))
-        setFlights(response.flights.slice(0, 4));
-      else setFlights([]);
-    });
-  }, [flightDirection]);
-
-  const changeFlightDirection = useCallback((direction: "A" | "D" | "") => {
-    setFlightDirection(direction);
-  }, []);
+  const getFlights = useMemo(
+    () => async (flightDirection: string, fromDate: string, toDate: string) => {
+      try {
+        const response = await getAllFlights(flightDirection, fromDate, toDate);
+        if (response) {
+          if (response.flights.length > 0 && Array.isArray(response.flights)) {
+            setFlights(response.flights.slice(0, 4));
+          }
+        } else setFlights([]);
+        return response;
+      } catch (error) {
+        console.error("Failed to fetch destination", error);
+        return {};
+      }
+    },
+    []
+  );
 
   const getDestination = useMemo(
     () => async (destination: string) => {
@@ -110,7 +115,7 @@ export const FlightProvider: React.FC<React.PropsWithChildren> = ({
         getDestination,
         getAirline,
         getAircraft,
-        changeFlightDirection,
+        getFlights,
       }}
     >
       {children}

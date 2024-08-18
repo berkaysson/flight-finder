@@ -1,12 +1,27 @@
 import { schipholAxiosInstance } from "../utils/axios";
 
-export const getAllFlights = async (flightDirection: string) => {
+export const getAllFlights = async (
+  flightDirection: string,
+  fromDateTime?: string,
+  toDateTime?: string
+) => {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const params: any = {
+      flightDirection: flightDirection,
+    };
+
+    if (fromDateTime) {
+      params.fromDateTime = fromDateTime;
+    }
+    if (toDateTime) {
+      params.toDateTime = toDateTime;
+    }
+
     const response = await schipholAxiosInstance.get("/flights", {
-      params: {
-        flightDirection: flightDirection,
-      },
+      params: params,
     });
+
     return response.data;
   } catch (error) {
     console.error("Error fetching flights:", error);

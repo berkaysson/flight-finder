@@ -96,6 +96,9 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
             </>
           )}
         </div>
+        <div className="flex text-sm">
+          <p className="text-textAlt">{flight.scheduleDate}</p>
+        </div>
 
         {/* Second Row: Flight schedule and airline */}
         <div className="flex flex-col justify-between gap-2 mt-6 mr-4 text-sm sm:gap-6 sm:items-center sm:flex-row">
@@ -107,7 +110,9 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
               Departure
             </div>
             <div className="font-bold">{departureTime}</div> Airport:
-            {flightDirection === "A" ? flight.route.destinations[0] : "Amsterdam (AAS)"}
+            {flightDirection === "A"
+              ? flight.route.destinations[0]
+              : "Amsterdam (AAS)"}
           </div>
 
           <div className="flex items-center justify-between w-full gap-10 sm:mx-10">
@@ -127,7 +132,8 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
               Arrival
             </div>
             <div className="font-bold">{landingTime}</div>
-            Airport: {flightDirection === "A" ? "AAS" : flight.route.destinations[0]}
+            Airport:{" "}
+            {flightDirection === "A" ? "AAS" : flight.route.destinations[0]}
           </div>
         </div>
 

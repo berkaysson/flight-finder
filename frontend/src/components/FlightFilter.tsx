@@ -1,31 +1,55 @@
 import styled from "styled-components";
 import Card from "./ui/Card";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { Plane, PlaneLanding, PlaneTakeoff, CalendarFold } from "lucide-react";
 import { FlightContext } from "../context/FlightsContext";
+import { format } from "date-fns";
+
+const formatDateTime = (date: string) => {
+  if (!date) return "";
+  return format(new Date(date), "yyyy-MM-dd'T'HH:mm:ss");
+};
 
 const FlightFilter = () => {
-  const { changeFlightDirection } = useContext(FlightContext);
+  const { getFlights } = useContext(FlightContext);
 
   const [tripType, setTripType] = useState("Round Trip");
-  const [from, setFrom] = useState("Other");
-  const [to, setTo] = useState("Amsterdam");
+  const [fromDestination, setFromDestination] = useState("Other");
+  const [toDestination, setToDestination] = useState("Amsterdam");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
 
-  const handleFromChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleFromDestinationChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     const value = event.target.value;
-    setFrom(value);
-    setTo(value === "Amsterdam" ? "Other" : "Amsterdam");
+    setFromDestination(value);
+    setToDestination(value === "Amsterdam" ? "Other" : "Amsterdam");
   };
 
-  const handleToChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleToDestinationChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     const value = event.target.value;
-    setTo(value);
-    setFrom(value === "Amsterdam" ? "Other" : "Amsterdam");
+    setToDestination(value);
+    setFromDestination(value === "Amsterdam" ? "Other" : "Amsterdam");
   };
 
-  useEffect(() => {
-    changeFlightDirection(from === "Amsterdam" ? "D" : "A");
-  }, [from]);
+  const handleFromDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFromDate(event.target.value);
+  };
+
+  const handleToDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setToDate(event.target.value);
+  };
+
+  const handleSubmit = async () => {
+    const formattedFromDate = formatDateTime(fromDate);
+    const formattedToDate = formatDateTime(toDate);
+    const flightDirection = fromDestination === "Amsterdam" ? "D" : "A";
+
+    await getFlights(flightDirection, formattedFromDate, formattedToDate);
+  };
 
   return (
     <Card>
@@ -57,8 +81,8 @@ const FlightFilter = () => {
           <InputWrapper>
             <PlaneTakeoff size={20} className="input-icon" />
             <StyledSelect
-              value={from}
-              onChange={handleFromChange}
+              value={fromDestination}
+              onChange={handleFromDestinationChange}
               className="sm:rounded-l-full sm:border-r-0 rounded-t-xl"
             >
               <option value="Other">Other</option>
@@ -68,8 +92,8 @@ const FlightFilter = () => {
           <InputWrapper>
             <PlaneLanding size={20} className="input-icon" />
             <StyledSelect
-              value={to}
-              onChange={handleToChange}
+              value={toDestination}
+              onChange={handleToDestinationChange}
               className="sm:rounded-r-full sm:border-l-0 rounded-b-xl"
             >
               <option value="Other">Other</option>
@@ -77,11 +101,14 @@ const FlightFilter = () => {
             </StyledSelect>
           </InputWrapper>
         </div>
+
         <div className="flex flex-col w-full gap-1 sm:flex-row">
           <InputWrapper>
             <CalendarFold size={20} className="input-icon" />
             <StyledInput
               type="date"
+              value={fromDate}
+              onChange={handleFromDateChange}
               className="sm:rounded-l-full sm:border-r-0 rounded-t-xl"
             />
           </InputWrapper>
@@ -89,6 +116,8 @@ const FlightFilter = () => {
             <CalendarFold size={20} className="input-icon" />
             <StyledInput
               type="date"
+              value={toDate}
+              onChange={handleToDateChange}
               className="sm:rounded-r-full sm:border-l-0 rounded-b-xl"
             />
           </InputWrapper>
@@ -96,7 +125,10 @@ const FlightFilter = () => {
       </div>
 
       <div className="flex m-2 mt-4">
-        <button className="px-4 py-2 text-white rounded-lg bg-theme hover:opacity-80">
+        <button
+          className="px-4 py-2 text-white rounded-lg bg-theme hover:opacity-80"
+          onClick={handleSubmit}
+        >
           Show Flights
         </button>
       </div>
