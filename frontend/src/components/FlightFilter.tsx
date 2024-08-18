@@ -8,31 +8,23 @@ const FlightFilter = () => {
   const { changeFlightDirection } = useContext(FlightContext);
 
   const [tripType, setTripType] = useState("Round Trip");
-  const [from, setFrom] = useState<"A" | "D">("D");
-  const [to, setTo] = useState<"A" | "D">("A");
+  const [from, setFrom] = useState("Other");
+  const [to, setTo] = useState("Amsterdam");
 
   const handleFromChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value as "A" | "D";
+    const value = event.target.value;
     setFrom(value);
-    if (value === "D") {
-      setTo("A");
-    } else {
-      setTo("D");
-    }
+    setTo(value === "Amsterdam" ? "Other" : "Amsterdam");
   };
 
   const handleToChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value as "A" | "D";
+    const value = event.target.value;
     setTo(value);
-    if (value === "D") {
-      setFrom("A");
-    } else {
-      setFrom("D");
-    }
+    setFrom(value === "Amsterdam" ? "Other" : "Amsterdam");
   };
 
   useEffect(() => {
-    changeFlightDirection(from);
+    changeFlightDirection(from === "Amsterdam" ? "D" : "A");
   }, [from]);
 
   return (
@@ -69,8 +61,8 @@ const FlightFilter = () => {
               onChange={handleFromChange}
               className="sm:rounded-l-full sm:border-r-0 rounded-t-xl"
             >
-              <option value="D">Amsterdam</option>
-              <option value="A">Other</option>
+              <option value="Other">Other</option>
+              <option value="Amsterdam">Amsterdam</option>
             </StyledSelect>
           </InputWrapper>
           <InputWrapper>
@@ -80,8 +72,8 @@ const FlightFilter = () => {
               onChange={handleToChange}
               className="sm:rounded-r-full sm:border-l-0 rounded-b-xl"
             >
-              <option value="A">Other</option>
-              <option value="D">Amsterdam</option>
+              <option value="Other">Other</option>
+              <option value="Amsterdam">Amsterdam</option>
             </StyledSelect>
           </InputWrapper>
         </div>

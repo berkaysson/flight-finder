@@ -40,25 +40,28 @@ export const FlightProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
   const [flights, setFlights] = useState<FlightInfo[]>([]);
-  const [flightDirection, setFlightDirection] = useState<"A" | "D" | "">("D");
+  const [flightDirection, setFlightDirection] = useState<"A" | "D" | "">("A");
 
   useEffect(() => {
-    getAllFlights("D").then((response) => {
+    getAllFlights(flightDirection).then((response) => {
       if (response) {
         if (response.flights.length > 0 && Array.isArray(response.flights)) {
-          setFlights(response.flights.slice(0, 5));
+          setFlights(response.flights.slice(0, 4));
         }
       } else setFlights([]);
     });
   }, []);
 
-  const changeFlightDirection = useCallback((direction: "A" | "D" | "") => {
-    setFlightDirection(direction);
-    getAllFlights(direction).then((response) => {
+  useEffect(() => {
+    getAllFlights(flightDirection).then((response) => {
       if (response.flights.length > 0 && Array.isArray(response.flights))
-        setFlights(response.flights.slice(0, 5));
+        setFlights(response.flights.slice(0, 4));
       else setFlights([]);
     });
+  }, [flightDirection]);
+
+  const changeFlightDirection = useCallback((direction: "A" | "D" | "") => {
+    setFlightDirection(direction);
   }, []);
 
   const getDestination = useMemo(
