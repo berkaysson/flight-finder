@@ -4,6 +4,8 @@ import Card from "./ui/Card";
 import { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "../context/ThemeContext";
 import { FlightContext } from "../context/FlightsContext";
+import toast from "react-simple-toasts";
+import { failureConfig, successConfig } from "../utils/toast";
 
 const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
   const { theme } = useContext(ThemeContext);
@@ -75,8 +77,8 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
         : destinations[destinations.length - 1];
 
     if (new Date(flight.scheduleDateTime) < new Date()) {
-      console.log("expired");
-      // add toaster
+      failureConfig();
+      toast("Sorry, flights can only be booked in the future");
       return;
     }
 
@@ -90,8 +92,13 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
       airlineCode: airline,
       price: 200,
     }).then((data) => {
-      console.log(data);
-      // add toaster
+      if (data) {
+        successConfig();
+        toast("Flight booked successfully");
+      } else {
+        failureConfig();
+        toast("Failed to book flight");
+      }
     });
   };
 
