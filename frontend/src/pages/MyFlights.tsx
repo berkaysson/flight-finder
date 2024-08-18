@@ -1,12 +1,30 @@
 import { Info } from "lucide-react";
 import MyFlightsFilter from "../components/MyFlightsFilter";
 import MyFlightsList from "../components/MyFlightsList";
+import { useContext, useState } from "react";
+import { FlightContext } from "../context/FlightsContext";
 
 const MyFlights = () => {
+  const { myFlights } = useContext(FlightContext);
+  const [selectedDestination, setSelectedDestination] = useState<string | null>(
+    null
+  );
+
+  const filteredFlights = selectedDestination
+    ? myFlights.filter(
+        (flight) =>
+          flight.departure === selectedDestination ||
+          flight.arrival === selectedDestination
+      )
+    : myFlights;
+
   return (
     <div className="flex flex-col h-full mx-auto max-w-7xl">
       <div>
-        <MyFlightsFilter />
+        <MyFlightsFilter
+          selectedDestination={selectedDestination}
+          setSelectedDestination={setSelectedDestination}
+        />
       </div>
       <div className="flex flex-col justify-between w-full my-4 sm:flex-row">
         <label>
@@ -28,7 +46,7 @@ const MyFlights = () => {
       </div>
 
       <div>
-        <MyFlightsList />
+        <MyFlightsList filteredFlights={filteredFlights} />
       </div>
     </div>
   );
