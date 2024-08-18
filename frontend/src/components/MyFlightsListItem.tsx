@@ -54,7 +54,7 @@ const MyFlightListItem = ({ flight }: { flight: FlightServiceData }) => {
           </div>
         </div>
         <div className="xl:w-1/2">
-          <div className="flex flex-row justify-end hidden gap-2 sm:flex">
+          <div className="flex-row justify-end hidden gap-2 sm:flex">
             {/* On larger screens, show all options */}
             {flightOptions.map((option, index) => (
               <div
