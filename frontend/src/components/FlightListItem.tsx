@@ -7,8 +7,14 @@ import { FlightContext } from "../context/FlightsContext";
 
 const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
   const { theme } = useContext(ThemeContext);
-  const { getDestination, getAirline, getAircraft, createMyFlight, myFlights } =
-    useContext(FlightContext);
+  const {
+    getDestination,
+    getAirline,
+    getAircraft,
+    createMyFlight,
+    myFlights,
+    isLoading,
+  } = useContext(FlightContext);
   const [airline, setAirline] = useState("...");
   const [destinations, setDestinations] = useState<string[]>(["..."]);
   const [aircraft, setAircraft] = useState("...");
@@ -34,6 +40,17 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
   const flightDuration = calculateDuration(
     new Date(flight.scheduleDateTime),
     new Date(flight.estimatedLandingTime)
+  );
+
+  const formattedDate = new Date(flight.scheduleDateTime).toLocaleDateString(
+    "en-US",
+    {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+    }
   );
 
   const flightDirection = flight.flightDirection;
@@ -128,7 +145,7 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
           )}
         </div>
         <div className="flex text-sm">
-          <p className="text-textAlt">{flight.scheduleDate}</p>
+          <p className="text-textAlt">{formattedDate}</p>
         </div>
 
         {/* Second Row: Flight schedule and airline */}
@@ -188,7 +205,10 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
               Booked!
             </div>
           ) : (
-            <button className="px-4 py-2 text-white translate-ease sm:py-4 sm:px-8 rounded-br-md rounded-tl-md bg-theme hover:opacity-80">
+            <button
+              disabled={isLoading}
+              className="px-4 py-2 text-white translate-ease sm:py-4 sm:px-8 rounded-br-md rounded-tl-md bg-theme hover:opacity-80"
+            >
               Book Flight
             </button>
           )}

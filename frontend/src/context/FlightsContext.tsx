@@ -23,6 +23,7 @@ interface FlightContextType {
   ) => Promise<any>;
   createMyFlight: (data: FlightServiceData) => Promise<any>;
   myFlights: FlightServiceData[];
+  isLoading: boolean;
 }
 
 export const FlightContext = createContext<FlightContextType>({
@@ -43,6 +44,7 @@ export const FlightContext = createContext<FlightContextType>({
     return {};
   },
   myFlights: [],
+  isLoading: false,
 });
 
 export const FlightProvider: React.FC<React.PropsWithChildren> = ({
@@ -50,6 +52,7 @@ export const FlightProvider: React.FC<React.PropsWithChildren> = ({
 }) => {
   const [flights, setFlights] = useState<FlightInfo[]>([]);
   const [myFlights, setMyFlights] = useState<FlightServiceData[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const localOffsetHour = new Date().getTimezoneOffset() / 60;
@@ -67,6 +70,7 @@ export const FlightProvider: React.FC<React.PropsWithChildren> = ({
         fromDate: string = "",
         toDate: string = ""
       ) => {
+        setIsLoading(true);
         try {
           const response = await getAllFlights(
             flightDirection,
@@ -85,6 +89,8 @@ export const FlightProvider: React.FC<React.PropsWithChildren> = ({
         } catch (error) {
           console.error("Failed to fetch flights", error);
           return {};
+        } finally {
+          setIsLoading(false);
         }
       },
     []
@@ -92,6 +98,7 @@ export const FlightProvider: React.FC<React.PropsWithChildren> = ({
 
   const getMyFlights = useMemo(
     () => async () => {
+      setIsLoading(true);
       try {
         const response = await getAllMyFlights();
         if (response) {
@@ -103,6 +110,8 @@ export const FlightProvider: React.FC<React.PropsWithChildren> = ({
       } catch (error) {
         console.error("Failed to fetch your flights", error);
         return {};
+      } finally {
+        setIsLoading(false);
       }
     },
     []
@@ -110,12 +119,15 @@ export const FlightProvider: React.FC<React.PropsWithChildren> = ({
 
   const getDestination = useMemo(
     () => async (destination: string) => {
+      setIsLoading(true);
       try {
         const response = await getDestinationByIata(destination);
         return response;
       } catch (error) {
         console.error("Failed to fetch destination", error);
         return {};
+      } finally {
+        setIsLoading(false);
       }
     },
     []
@@ -123,12 +135,15 @@ export const FlightProvider: React.FC<React.PropsWithChildren> = ({
 
   const getAirline = useMemo(
     () => async (prefixIata: string) => {
+      setIsLoading(true);
       try {
         const response = await getAirlineByIata(prefixIata);
         return response;
       } catch (error) {
         console.error("Failed to fetch airline", error);
         return {};
+      } finally {
+        setIsLoading(false);
       }
     },
     []
@@ -136,12 +151,15 @@ export const FlightProvider: React.FC<React.PropsWithChildren> = ({
 
   const getAircraft = useMemo(
     () => async (iataMain: string, iataSub: string) => {
+      setIsLoading(true);
       try {
         const response = await getAircraftTypes(iataMain, iataSub);
         return response;
       } catch (error) {
         console.error("Failed to fetch aircraft types", error);
         return {};
+      } finally {
+        setIsLoading(false);
       }
     },
     []
@@ -149,6 +167,7 @@ export const FlightProvider: React.FC<React.PropsWithChildren> = ({
 
   const createMyFlight = useMemo(
     () => async (flightData: FlightServiceData) => {
+      setIsLoading(true);
       try {
         const response = await createFlight(flightData);
         getAllMyFlights().then((response) => {
@@ -162,6 +181,8 @@ export const FlightProvider: React.FC<React.PropsWithChildren> = ({
       } catch (error) {
         console.error("Failed to create your flight", error);
         return {};
+      } finally {
+        setIsLoading(false);
       }
     },
     []
@@ -172,6 +193,7 @@ export const FlightProvider: React.FC<React.PropsWithChildren> = ({
       value={{
         flights,
         myFlights,
+        isLoading,
         getDestination,
         getAirline,
         getAircraft,

@@ -6,7 +6,7 @@ import { FlightContext } from "../context/FlightsContext";
 import { formatDateTime } from "../utils/date";
 
 const FlightFilter = () => {
-  const { getFlights } = useContext(FlightContext);
+  const { getFlights, isLoading } = useContext(FlightContext);
 
   const [tripType, setTripType] = useState("Round Trip");
   const [fromDestination, setFromDestination] = useState("Other");
@@ -123,6 +123,7 @@ const FlightFilter = () => {
         <button
           className="px-4 py-2 text-white rounded-lg translate-ease bg-theme hover:opacity-80"
           onClick={handleSubmit}
+          disabled={isLoading}
         >
           Show Flights
         </button>
