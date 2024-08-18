@@ -152,7 +152,7 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
 
         {/* Third Row: Book Flight Button */}
         <div className="absolute bottom-0 right-0">
-          <button className="px-4 py-2 text-white sm:px-8 rounded-br-md rounded-tl-md bg-theme hover:opacity-80">
+          <button className="px-4 py-2 text-white sm:py-4 sm:px-8 rounded-br-md rounded-tl-md bg-theme hover:opacity-80">
             Book Flight
           </button>
         </div>

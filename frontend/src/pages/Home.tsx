@@ -7,12 +7,10 @@ const Home = () => {
     <div className="flex flex-col h-full mx-auto mt-6 lg:flex-row max-w-7xl">
       <div className="w-full lg:w-3/4">
         <FlightFilter />
-
         <div className="flex flex-col-reverse lg:flex-row">
-          <div className="w-full lg:w-3/4">
+          <div className="w-full">
             <FlightList />
           </div>
-          <div className="w-full lg:w-1/4">Flight sorter</div>
         </div>
       </div>
       <div className="w-full lg:w-1/4">
