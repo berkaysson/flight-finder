@@ -1,5 +1,8 @@
 import { backendAxiosInstance } from "../utils/axios";
 
+// bu dosyada schiphol apiye gidecek istekler oluşturulur.
+
+// Tüm uçuşları almak için backend API'ye istek atan fonksiyon.
 export const getAllFlights = async (
   flightDirection: string,
   fromDateTime?: string,
@@ -28,6 +31,7 @@ export const getAllFlights = async (
   }
 };
 
+// IATA kodu ile destinasyon bilgisi almak için backend API'ye istek atan fonksiyon.
 export const getDestinationByIata = async (destination: string) => {
   try {
     const response = await backendAxiosInstance.get(
@@ -40,6 +44,7 @@ export const getDestinationByIata = async (destination: string) => {
   }
 };
 
+// IATA kodu ile havayolu bilgisi almak için backend API'ye istek atan fonksiyon.
 export const getAirlineByIata = async (prefixIata: string) => {
   try {
     const response = await backendAxiosInstance.get(
@@ -52,6 +57,7 @@ export const getAirlineByIata = async (prefixIata: string) => {
   }
 };
 
+// IATA kodları ile uçak tiplerini almak için backend API'ye istek atan fonksiyon.
 export const getAircraftTypes = async (iataMain: string, iataSub: string) => {
   try {
     const response = await backendAxiosInstance.get(`/schiphol/aircrafttypes`, {

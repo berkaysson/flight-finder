@@ -2,6 +2,10 @@ import React, { createContext } from "react";
 import { ThemeProvider as StyledThemeProvider } from "styled-components";
 import { lightTheme } from "../utils/theme";
 
+// ThemeContext uygulama boyunca tanımlanan lightTheme objesini dağıtmaktadır,
+// bu kullanım sayesinde temada değişiklikler kolaylaştırılıp ileriki süreçlerde darkTheme ekleme imkanı vardır.
+// theme: src/utils/theme.ts
+
 interface ThemeContextType {
   theme: typeof lightTheme;
 }

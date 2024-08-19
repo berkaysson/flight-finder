@@ -1,6 +1,7 @@
 import { FlightServiceData } from "../types/flight";
 import { backendAxiosInstance } from "../utils/axios";
 
+// Kullanıcının rezerve tüm uçuşlarını almak için backend API'ye istek atan fonksiyon.
 export const getAllMyFlights = async () => {
   try {
     const response = await backendAxiosInstance.get("/flight");
@@ -11,6 +12,7 @@ export const getAllMyFlights = async () => {
   }
 };
 
+// Yeni bir rezerve uçuş oluşturmak için backend API'ye istek atan fonksiyon.
 export const createFlight = async (flightData: FlightServiceData) => {
   try {
     const response = await backendAxiosInstance.post("/flight", flightData);
@@ -19,4 +21,4 @@ export const createFlight = async (flightData: FlightServiceData) => {
     console.error("Error creating flight:", error);
     throw error;
   }
-}
+};

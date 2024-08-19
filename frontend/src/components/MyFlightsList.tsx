@@ -2,10 +2,14 @@ import { FlightServiceData } from "../types/flight";
 import MyFlightListItem from "./MyFlightsListItem";
 import { Link } from "react-router-dom";
 
-const MyFlightsList = ({ filteredFlights }: { filteredFlights: FlightServiceData[] }) => {
-
+const MyFlightsList = ({
+  filteredFlights,
+}: {
+  filteredFlights: FlightServiceData[];
+}) => {
   return (
     <ul className="flex flex-col gap-4">
+      {/* Eğer filtrelenmiş uçuş listesi boşsa */}
       {filteredFlights.length === 0 && (
         <>
           <li className="text-sm text-textAlt">You have no flights.</li>
@@ -20,6 +24,7 @@ const MyFlightsList = ({ filteredFlights }: { filteredFlights: FlightServiceData
         </>
       )}
 
+      {/* Filtrelenmiş uçuşları listele */}
       {filteredFlights.map((flight, index) => {
         return <MyFlightListItem key={flight.id + index} flight={flight} />;
       })}

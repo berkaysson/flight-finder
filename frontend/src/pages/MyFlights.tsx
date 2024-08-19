@@ -4,12 +4,17 @@ import MyFlightsList from "../components/MyFlightsList";
 import { useContext, useState } from "react";
 import { FlightContext } from "../context/FlightsContext";
 
+// Uçuşlarım sayfası bileşeni, rezerve uçuşları gösterir.
 const MyFlights = () => {
+  // FlightContext'ten `myFlights` verisini alıyoruz.
   const { myFlights } = useContext(FlightContext);
+  // Seçilen destinasyon için state oluşturuyoruz.
   const [selectedDestination, setSelectedDestination] = useState<string | null>(
     null
   );
 
+  // Seçilen destinasyona göre uçuşları filtreliyoruz.
+  // Eğer destinasyon seçilmediyse tüm uçuşlar gösteriliyor.
   const filteredFlights = selectedDestination
     ? myFlights.filter(
         (flight) =>

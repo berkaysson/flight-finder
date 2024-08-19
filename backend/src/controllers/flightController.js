@@ -1,5 +1,6 @@
 const flightService = require("../services/flightService");
 
+// Uçuş oluşturma işlevi, rezervasyon
 exports.createFlight = async (req, res, next) => {
   try {
     const flight = await flightService.createFlight(req.body);
@@ -9,6 +10,7 @@ exports.createFlight = async (req, res, next) => {
   }
 };
 
+// Rezerve uçuşları getirme işlevi
 exports.getFlights = async (req, res, next) => {
   try {
     const flights = await flightService.getFlights(req.query);

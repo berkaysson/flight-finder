@@ -8,14 +8,18 @@ const MyFlightsFilter = ({
   setSelectedDestination: Dispatch<SetStateAction<string | null>>;
   selectedDestination: string | null;
 }) => {
+  // FlightContext'ten `myFlights`(rezerve uçuşlar) verisini alıyoruz.
   const { myFlights } = useContext(FlightContext);
 
+  // Rezervasyon yapılan destinasyonların listesini oluşturyruz
   const bookedDestinations = Array.from(
+    // new Set ile birbirinden farklı destinasyonlar için array oluşturuyoruz
     new Set(myFlights.flatMap((flight) => [flight.departure, flight.arrival]))
   );
 
   return (
     <div className="flex flex-row flex-wrap gap-3 mt-6">
+      {/* Destinations: Rezerve edilen destinasyonlardan filtreleme butonu türetiliyor */}
       {bookedDestinations.map((destination) => (
         <button
           onClick={() =>

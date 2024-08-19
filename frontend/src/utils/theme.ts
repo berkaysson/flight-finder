@@ -1,3 +1,5 @@
+// uyglamada kullanılan renkler burada tanımlanmıştır
+
 export const lightTheme = {
   colors: {
     background: "#f6f4f8",

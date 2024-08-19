@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
 
+// Mongo url test edilebilmesi için açık bırakılmıştıri normalde saklanması gerekiyor
 const MONGO_URL =
   "mongodb+srv://berkaysonel85:1998berkay@cluster0.aci9b.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
+// MongoDB'ye bağlanma işlevi
 const connectDB = async () => {
   try {
     mongoose.Promise = Promise;

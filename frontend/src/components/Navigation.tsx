@@ -8,13 +8,16 @@ const Navigation = () => {
   const { theme } = useContext(ThemeContext);
   return (
     <nav className="flex items-center justify-between mx-auto max-w-7xl">
+      {/* Ana sayfaya giden bağlantı */}
       <Link to="/" className="flex items-center gap-1">
         <Plane size={32} color={theme.colors.theme} />
         <h1 className="hidden text-xl font-bold tracking-tighter uppercase sm:block">
           Flight Finder
         </h1>
       </Link>
+
       <div className="flex gap-4 text-sm sm:gap-6">
+        {/* Deals ve Discover bağlantıları */}
         <a className="items-center hidden gap-1 sm:flex hover:underline hover:cursor-pointer">
           <Tag size={20} color={theme.colors.theme} />
           Deals
@@ -23,6 +26,8 @@ const Navigation = () => {
           <Earth size={20} color={theme.colors.theme} />
           Discover
         </a>
+
+        {/* Kullanıcı profil, uçuşlarım bağlantısı */}
         <Link
           to="/my-flights"
           className="flex items-center gap-1 hover:underline hover:cursor-pointer"

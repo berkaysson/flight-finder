@@ -4,6 +4,7 @@ import FlightListItem from "./FlightListItem";
 import { FlightContext } from "../context/FlightsContext";
 
 const FlightList = () => {
+  // FlightContext'ten `flights` verisini alıyoruz.
   const { flights } = useContext(FlightContext);
 
   return (

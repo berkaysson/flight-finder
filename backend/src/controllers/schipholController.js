@@ -1,5 +1,6 @@
 const schipholService = require("../services/schipholService");
 
+// Uçuşları getirme işlevi
 const getFlights = async (req, res) => {
   const { flightDirection, fromDateTime, toDateTime } = req.query;
 
@@ -16,6 +17,7 @@ const getFlights = async (req, res) => {
   }
 };
 
+// IATA koduna göre destinasyon verilerini getirme işlevi
 const getDestinationByIata = async (req, res) => {
   const { destination } = req.params;
 
@@ -30,6 +32,7 @@ const getDestinationByIata = async (req, res) => {
   }
 };
 
+// IATA koduna göre havayolu verilerini getirme işlevi
 const getAirlineByIata = async (req, res) => {
   const { prefixIata } = req.params;
 
@@ -42,6 +45,7 @@ const getAirlineByIata = async (req, res) => {
   }
 };
 
+// Uçak türlerini getirme işlevi
 const getAircraftTypes = async (req, res) => {
   const { iataMain, iataSub } = req.query;
 

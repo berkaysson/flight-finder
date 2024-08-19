@@ -9,6 +9,7 @@ const router = require("./router");
 
 const app = express();
 
+// CORS ayarları: Yalnızca belirtilen origin'den gelen istekler kabul edilir
 app.use(
   cors({
     credentials: true,
@@ -16,10 +17,12 @@ app.use(
   })
 );
 
+// İstek gövdesini JSON olarak ayrıştır
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(compression());
 
+// API yollarını yönlendir
 app.use("/api", router);
 
 const server = http.createServer(app);
@@ -28,4 +31,5 @@ server.listen(8080, () => {
   console.log("Server started on http://localhost:8080");
 });
 
+// Veritabanına bağlan
 connectDB();

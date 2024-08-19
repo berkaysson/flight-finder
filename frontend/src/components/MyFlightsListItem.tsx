@@ -6,6 +6,7 @@ import { useState } from "react";
 const MyFlightListItem = ({ flight }: { flight: FlightServiceData }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
+  // Tarihi formatlayor
   const formattedDate = new Date(flight.scheduleDateTime).toLocaleDateString(
     "en-US",
     {
@@ -17,6 +18,8 @@ const MyFlightListItem = ({ flight }: { flight: FlightServiceData }) => {
     }
   );
 
+  // Uçuş seçenekleri, seçenekler ve ücretler api tarafında sağlanmadığı için
+  // varsaylına olarak aşağıdakiler eklendi
   const flightOptions = [
     { type: "Main", price: "$500" },
     { type: "Comfort", price: "$600" },
@@ -25,11 +28,13 @@ const MyFlightListItem = ({ flight }: { flight: FlightServiceData }) => {
     { type: "Economy", price: "$350" },
   ];
 
+  // Detayları genişletme/küçültme işlevi
   const toggleExpand = () => setIsExpanded(!isExpanded);
 
   return (
     <Card>
       <div className="flex flex-col justify-between gap-2 p-2 xl:flex-row">
+        {/* Uçuş bilgileri */}
         <div className="flex flex-col items-start justify-start gap-4 xl:w-1/2">
           <div className="flex flex-row gap-2 sm:gap-6">
             <span>
@@ -53,9 +58,11 @@ const MyFlightListItem = ({ flight }: { flight: FlightServiceData }) => {
             </div>
           </div>
         </div>
+
+        {/* Fiyat seçenekleri */}
         <div className="xl:w-1/2">
+          {/* Büyük ekranlar için tüm seçenekleri göster */}
           <div className="flex-row justify-end hidden gap-2 sm:flex">
-            {/* On larger screens, show all options */}
             {flightOptions.map((option, index) => (
               <div
                 key={index}
@@ -67,7 +74,7 @@ const MyFlightListItem = ({ flight }: { flight: FlightServiceData }) => {
             ))}
           </div>
 
-          {/* For smaller screens, show expand/collapse functionality */}
+          {/* Küçük ekranlar için genişletme/küçültme işlevi */}
           <div
             className={`flex ${
               isExpanded ? "flex-col" : "flex-row"
@@ -94,7 +101,7 @@ const MyFlightListItem = ({ flight }: { flight: FlightServiceData }) => {
               ))}
           </div>
 
-          {/* Expand/Collapse button for small screens */}
+          {/* Küçük ekranlar için genişletme/küçültme butonu */}
           <div className="flex justify-end mt-2 sm:hidden">
             <button
               onClick={toggleExpand}

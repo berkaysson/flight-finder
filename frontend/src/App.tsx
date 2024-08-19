@@ -3,6 +3,9 @@ import { ThemeProvider } from "./context/ThemeContext";
 import Layout from "./Layout";
 import { FlightProvider } from "./context/FlightsContext";
 
+// Uygulamada tema bilgileri ve uçuş yönetimi Context API ile yapılmıştır.
+// Providerlarda Context APInin sağladığı basit ve düzenli yapı kullanılmıştır.
+// Layout içerisinde react-router yönetimi yapılmıştır.
 function App() {
   return (
     <AppWrapper>

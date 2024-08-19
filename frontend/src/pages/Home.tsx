@@ -2,6 +2,7 @@ import FlightFilter from "../components/FlightFilter";
 import FlightList from "../components/FlightList";
 import Services from "../components/Services";
 
+// Ana sayfa bileşeni, uçuş filtreleme ve listeleme ile hizmetleri gösterir.
 const Home = () => {
   return (
     <div className="flex flex-col h-full mx-auto mt-6 lg:flex-row max-w-7xl">

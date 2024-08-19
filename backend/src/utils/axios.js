@@ -1,5 +1,8 @@
-const axios = require('axios');
+const axios = require("axios");
 
+// Schiphol API için özel axios örneği oluşturuluyor
+// app id ve key test edilebilmesi için bırakılmıştır
+// fakat doğru kullanımda saklanması gerekmekte
 const schipholAxiosInstance = axios.create({
   baseURL: "https://api.schiphol.nl/public-flights",
   headers: {

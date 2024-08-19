@@ -1,6 +1,7 @@
+// schiphol api yanıtını temsilen arayüz
 export type FlightInfo = {
-  lastUpdatedAt: string; // ISO date string
-  actualLandingTime: string; // ISO date string
+  lastUpdatedAt: string;
+  actualLandingTime: string;
   aircraftType: {
     iataMain: string;
     iataSub: string;
@@ -8,8 +9,8 @@ export type FlightInfo = {
   baggageClaim: {
     belts: string[];
   };
-  estimatedLandingTime: string; // ISO date string
-  expectedTimeOnBelt: string; // ISO date string
+  estimatedLandingTime: string;
+  expectedTimeOnBelt: string;
   flightDirection: string;
   flightName: string;
   flightNumber: number;
@@ -27,18 +28,19 @@ export type FlightInfo = {
     eu: string;
     visa: boolean;
   };
-  scheduleDateTime: string; // ISO date string
-  scheduleDate: string; // ISO date string
-  scheduleTime: string; // Time string
+  scheduleDateTime: string;
+  scheduleDate: string;
+  scheduleTime: string;
   serviceType: string;
   terminal: number;
   schemaVersion: string;
 };
 
+// MongoDBde saklanan rezerve uçuşu temsilen arayüz
 export interface FlightServiceData {
   id: string;
   mainFlight: string;
-  scheduleDateTime: string; // Use ISO string format for dates
+  scheduleDateTime: string;
   departure: string;
   arrival: string;
   userId: string;

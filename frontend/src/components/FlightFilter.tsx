@@ -8,12 +8,14 @@ import { formatDateTime } from "../utils/date";
 const FlightFilter = () => {
   const { getFlights, isLoading } = useContext(FlightContext);
 
+  // Kullanıcı girişleri için state tanımları.
   const [tripType, setTripType] = useState("Round Trip");
   const [fromDestination, setFromDestination] = useState("Other");
   const [toDestination, setToDestination] = useState("Amsterdam");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
 
+  // Kalkış noktası değiştiğinde varış noktasını otomatik ayarlayan fonksiyon.
   const handleFromDestinationChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
@@ -22,6 +24,7 @@ const FlightFilter = () => {
     setToDestination(value === "Amsterdam" ? "Other" : "Amsterdam");
   };
 
+  // Varış noktası değiştiğinde varış noktasını otomatik ayarlayan fonksiyon.
   const handleToDestinationChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
@@ -30,6 +33,7 @@ const FlightFilter = () => {
     setFromDestination(value === "Amsterdam" ? "Other" : "Amsterdam");
   };
 
+  // Tarih seçimi için event handler'lar.
   const handleFromDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFromDate(event.target.value);
   };
@@ -38,6 +42,7 @@ const FlightFilter = () => {
     setToDate(event.target.value);
   };
 
+  // Form submit işlemi, filtrelenmiş uçuşları getFlights fonksiyonunu çağırarak getiriyor.
   const handleSubmit = async () => {
     const formattedFromDate = formatDateTime(fromDate);
     const formattedToDate = formatDateTime(toDate);
@@ -48,6 +53,7 @@ const FlightFilter = () => {
 
   return (
     <Card>
+      {/* Üst bölüm: başlık ve yolculuk türü seçimi */}
       <div className="flex flex-col justify-between gap-4 mb-4 md:flex-row">
         <h2 className="flex items-center gap-2 text-lg font-bold">
           <Plane size={20} />
@@ -71,7 +77,10 @@ const FlightFilter = () => {
         </div>
       </div>
 
+      {/* Orta bölüm: kalkış/varış yeri ve tarih seçimi */}
       <div className="flex flex-col items-center justify-between gap-4 lg:flex-row">
+
+        {/* Kalkış noktası ve varış noktası seçimi. */}
         <div className="flex flex-col w-full gap-1 sm:flex-row">
           <InputWrapper>
             <PlaneTakeoff size={20} className="input-icon" />
@@ -97,6 +106,7 @@ const FlightFilter = () => {
           </InputWrapper>
         </div>
 
+        {/* Tarihleri seçimi. */}
         <div className="flex flex-col w-full gap-1 sm:flex-row">
           <InputWrapper>
             <CalendarFold size={20} className="input-icon" />
@@ -119,6 +129,7 @@ const FlightFilter = () => {
         </div>
       </div>
 
+      {/* Uçuşları göster butonu */}
       <div className="flex m-2 mt-4">
         <button
           className="px-4 py-2 text-white rounded-lg translate-ease bg-theme hover:opacity-80"

@@ -7,8 +7,23 @@ import { FlightContext } from "../context/FlightsContext";
 import toast from "react-simple-toasts";
 import { failureConfig, successConfig } from "../utils/toast";
 
+// Uçuş süresini hesaplayan fonksiyon.
+function calculateDuration(start: Date, end: Date): string {
+  const durationMs = end.getTime() - start.getTime();
+  const hours = Math.abs(Math.floor(durationMs / (1000 * 60 * 60)));
+  const minutes = Math.abs(
+    Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60))
+  );
+  if (isNaN(hours) || isNaN(minutes)) {
+    return "N/A";
+  }
+  return `${hours}h ${minutes}m`;
+}
+
+// FlightContext'te buluna her bir flights objesi burada gösteriliyor.
 const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
   const { theme } = useContext(ThemeContext);
+
   const {
     getDestination,
     getAirline,
@@ -17,13 +32,17 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
     myFlights,
     isLoading,
   } = useContext(FlightContext);
+
+  // Destinations, Airline, Aircraft durumları
   const [airline, setAirline] = useState("...");
   const [destinations, setDestinations] = useState<string[]>(["..."]);
   const [aircraft, setAircraft] = useState("...");
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
+  // Bu uçuşun daha önce rezerve edilip edilmediğini kontrol ediyoruz.
   const isBooked = myFlights.find((myFlight) => myFlight.id === flight.id);
 
+  // Uçuş saatlerini formatlıyoruz.
   const departureTime = new Date(flight.scheduleDateTime).toLocaleTimeString(
     [],
     {
@@ -39,11 +58,13 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
       })
     : "N/A";
 
+  // Uçuş süresini hesaplayan yardımcı fonksiyon.
   const flightDuration = calculateDuration(
     new Date(flight.scheduleDateTime),
     new Date(flight.estimatedLandingTime)
   );
 
+  // Uçuş tarihini formatlıyoruz.
   const formattedDate = new Date(flight.scheduleDateTime).toLocaleDateString(
     "en-US",
     {
@@ -55,20 +76,10 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
     }
   );
 
+  // Uçuş yönü (geliş veya gidiş) bilgisini tutuyoruz.
   const flightDirection = flight.flightDirection;
 
-  function calculateDuration(start: Date, end: Date): string {
-    const durationMs = end.getTime() - start.getTime();
-    const hours = Math.abs(Math.floor(durationMs / (1000 * 60 * 60)));
-    const minutes = Math.abs(
-      Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60))
-    );
-    if (isNaN(hours) || isNaN(minutes)) {
-      return "N/A";
-    }
-    return `${hours}h ${minutes}m`;
-  }
-
+  // Uçuşu rezerve eden fonksiyon.
   const handleBookFlight = () => {
     const departure = flightDirection === "D" ? "Amsterdam" : destinations[0];
     const arrival =
@@ -76,12 +87,14 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
         ? "Amsterdam"
         : destinations[destinations.length - 1];
 
+    // Geçmişteki uçuşlar rezerve edilemez.
     if (new Date(flight.scheduleDateTime) < new Date()) {
       failureConfig();
       toast("Sorry, flights can only be booked in the future");
       return;
     }
 
+    // Uçuş rezervasyonu oluşturma.
     createMyFlight({
       id: flight.id,
       mainFlight: flight.mainFlight,
@@ -102,6 +115,7 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
     });
   };
 
+  // Varış noktalarını ve hava yolu bilgilerini çekmek için useEffect kullanıyoruz.
   useEffect(() => {
     const fetchDestinations = async () => {
       const destinationPromises = flight.route.destinations.map((destination) =>
@@ -117,6 +131,7 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
     });
   }, [flight, getDestination]);
 
+  // Detaylar açıldığında uçak tipi bilgilerini çekiyoruz.
   useEffect(() => {
     if (isDetailsOpen && aircraft.length < 4) {
       getAircraft(
@@ -131,7 +146,7 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
   return (
     <Card sx="rounded-bl-none">
       <div className="flex flex-col gap-2">
-        {/* First Row: Travel route */}
+        {/* İlk satır: Uçuş rotası */}
         <div className="flex flex-row gap-2 text-lg font-bold">
           {flightDirection === "A" ? (
             <>
@@ -155,8 +170,9 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
           <p className="text-textAlt">{formattedDate}</p>
         </div>
 
-        {/* Second Row: Flight schedule and airline */}
+        {/* İkinci satır: Uçuş programı ve hava yolu */}
         <div className="flex flex-col justify-between gap-2 mt-6 mr-4 text-sm sm:gap-6 sm:items-center sm:flex-row">
+          {/* Kalkış bilgisi */}
           <div className="flex flex-col items-start gap-1">
             <div className="flex items-center gap-1 sm:block">
               <span>
@@ -170,6 +186,7 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
               : "Amsterdam (AAS)"}
           </div>
 
+          {/* Uçuş süresi ve hava yolu */}
           <div className="flex items-center justify-between w-full gap-10 sm:mx-10">
             <div className="w-1/2 h-[2px] rounded-full bg-gray-400"></div>
             <div className="flex flex-col items-center gap-2 whitespace-nowrap">
@@ -180,6 +197,7 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
           </div>
 
           <div className="flex flex-col items-end gap-1">
+            {/* Varış bilgisi */}
             <div className="flex items-center gap-1 sm:block">
               <span>
                 <PlaneLanding size={20} />
@@ -192,6 +210,7 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
           </div>
         </div>
 
+        {/* Uçuş detayları */}
         <div className="flex flex-col items-start justify-start mt-4">
           <p className="font-bold text-theme">
             Price: <span>200$</span>
@@ -205,7 +224,7 @@ const FlightListItem = ({ flight }: { flight: FlightInfo }) => {
           )}
         </div>
 
-        {/* Third Row: Book Flight Button */}
+        {/* Rezervasyon */}
         <div className="absolute bottom-0 right-0" onClick={handleBookFlight}>
           {isBooked ? (
             <div className="px-4 py-2 font-bold text-textAlt sm:py-4 sm:px-8 rounded-br-md rounded-tl-md bg-hover">

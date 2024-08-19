@@ -1,3 +1,6 @@
+// Sahte bir kullanıcı tanımı
+// İleride burası için bir api bağlantısı yapılmalıdır
+
 const MOCK_USER = {
     id: "1",
     name: "Joane Smith",

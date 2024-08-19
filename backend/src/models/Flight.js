@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+// Rezerve uçus - myFlight için veri tabanı modeli
 const flightSchema = new mongoose.Schema(
   {
     id: { type: String, required: true },

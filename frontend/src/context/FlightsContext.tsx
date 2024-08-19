@@ -11,6 +11,7 @@ import { createFlight, getAllMyFlights } from "../services/backendService";
 import { formatDateTime } from "../utils/date";
 import { addHours } from "date-fns";
 
+// FlightContext'i tanımlar, yapı arayüzü
 interface FlightContextType {
   flights: FlightInfo[];
   getDestination: (destination: string) => Promise<any>;
@@ -26,6 +27,7 @@ interface FlightContextType {
   isLoading: boolean;
 }
 
+// FlightContext yapısını oluşturur ve varsayılan değerler atar.
 export const FlightContext = createContext<FlightContextType>({
   flights: [],
   getDestination: async () => {
@@ -47,22 +49,29 @@ export const FlightContext = createContext<FlightContextType>({
   isLoading: false,
 });
 
+// FlightProvider bileşeni, uygulamanın alt bileşenlerine uçuş verilerini sağlar.
+// Veriler ve metotlar memoize edilmiştir böylelikler performans arttırılmıştır.
 export const FlightProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
+  // flights ve myFlights state'leri uçuş bilgilerini tutmak için kullanılır.
   const [flights, setFlights] = useState<FlightInfo[]>([]);
   const [myFlights, setMyFlights] = useState<FlightServiceData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  // Sayfa yüklendiğinde uçuş verilerini ve kullanıcının uçuşlarını almak için kullanılır.
   useEffect(() => {
+    // timezone'i hesaplamak için kullanılır.
     const localOffsetHour = new Date().getTimezoneOffset() / 60;
     const now = formatDateTime(
       addHours(new Date(), -localOffsetHour).toISOString().slice(0, 16)
     );
+    // varsayılan olarak şimdiki tarihi ve 'A' yani arrival to Amsterdam verir.
     getFlights("A", now);
     getMyFlights();
   }, []);
 
+  // Uçuşları almak için kullanılan fonksiyon. Tarih ve yön filtreleri ile çalışır.
   const getFlights = useMemo(
     () =>
       async (
@@ -82,6 +91,8 @@ export const FlightProvider: React.FC<React.PropsWithChildren> = ({
               response.flights.length > 0 &&
               Array.isArray(response.flights)
             ) {
+              // Uçuş verileri varsa, en fazla 4 uçuş gösterir.
+              // Bunun sebebi ileride eklenecek potansiyel pagination olmasıdır.
               setFlights(response.flights.slice(0, 4));
             }
           } else setFlights([]);
@@ -96,6 +107,7 @@ export const FlightProvider: React.FC<React.PropsWithChildren> = ({
     []
   );
 
+  // Kullanıcının rezerve yaptığı uçuşları almak için kullanılan fonksiyon.
   const getMyFlights = useMemo(
     () => async () => {
       setIsLoading(true);
@@ -117,6 +129,7 @@ export const FlightProvider: React.FC<React.PropsWithChildren> = ({
     []
   );
 
+  // IATA kodu ile destinasyon bilgisi almak için kullanılan fonksiyon.
   const getDestination = useMemo(
     () => async (destination: string) => {
       setIsLoading(true);
@@ -133,6 +146,7 @@ export const FlightProvider: React.FC<React.PropsWithChildren> = ({
     []
   );
 
+  // IATA kodu ile hava yolu bilgisi almak için kullanılan fonksiyon.
   const getAirline = useMemo(
     () => async (prefixIata: string) => {
       setIsLoading(true);
@@ -149,6 +163,7 @@ export const FlightProvider: React.FC<React.PropsWithChildren> = ({
     []
   );
 
+  // IATA kodları ile uçak türlerini almak için kullanılan fonksiyon.
   const getAircraft = useMemo(
     () => async (iataMain: string, iataSub: string) => {
       setIsLoading(true);
@@ -165,6 +180,7 @@ export const FlightProvider: React.FC<React.PropsWithChildren> = ({
     []
   );
 
+  // Yeni bir uçuş rezervesi oluşturmak için kullanılan fonksiyon.
   const createMyFlight = useMemo(
     () => async (flightData: FlightServiceData) => {
       setIsLoading(true);
